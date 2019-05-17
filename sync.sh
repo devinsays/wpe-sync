@@ -23,25 +23,23 @@ env_message=false
 
 function wpe_get_database() {
 	env_message=true
-	sshpass -p $sftppass SFTP -P 2222 -r $sftpuser@$server:wp-content/mysql.sql mysql.sql
+	ssh -t $sshenv@$sshenv.ssh.wpengine.net bash -c "cd /sites/{$sshenv} && wp db export -" > db.sql
 }
 
 function overwrite_database() {
 	env_message=true
-	wp db import mysql.sql
+	wp db import db.sql
 	wp search-replace ${replace[0]} ${replace[1]}
 }
 
 function wpe_get_plugins() {
 	env_message=true
-	sshpass -p $sftppass SFTP -P 2222 -r $sftpuser@$server:wp-content/plugins wp-content/
-	rm -rf wp-content/plugins/hyperdb
-	rm -rf wp-content/plugins/hyperdb-1-1
+	rsync -rvz --progress $sshenv@$sshenv.ssh.wpengine.net:/sites/$sshenv/wp-content/plugins wp-content
 }
 
 function wpe_get_uploads() {
 	env_message=true
-	sshpass -p $sftppass SFTP -P 2222 -r $sftpuser@$server:wp-content/uploads wp-content/
+	rsync -rvz --progress $sshenv@$sshenv.ssh.wpengine.net:/sites/$sshenv/wp-content/uploads wp-content
 }
 
 function run_scripts() {
@@ -71,5 +69,5 @@ run_scripts
 if [[ $env_message = false ]]; then
 	printf "$(tput setaf 3)$(tput bold)Warning:$(tput setaf 0)$(tput sgr0) Sync failed.\n"
 else
-	printf "$(tput setaf 2)$(tput bold)Success:$(tput setaf 0)$(tput sgr0) ${PWD##*/} environment synced.\n"
+	printf "$(tput setaf 2)$(tput bold)Success:$(tput setaf 0)$(tput sgr0) ${sshenv} environment synced.\n"
 fi

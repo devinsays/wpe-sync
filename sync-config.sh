@@ -1,4 +1,2 @@
-sftpuser=example-user
-sftppass=example-password
-server=example.sftp.wpengine.com
+sshenv=example
 replace=('example.com' 'example.local')

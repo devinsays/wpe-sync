@@ -1,6 +1,10 @@
 # WPE Sync
 
-Bash script for automating common tasks on WP Engine, such as SFTP file downloads and database local database syncing.
+Script for running common sync tasks between your WP Engine site and local.
+
+Requires [SSH Access](https://wpengine.com/support/getting-started-ssh-gateway/) enabled on your WP Engine account.
+
+Assumes you have wp-cli installed locally and can run it from your local site directory.
 
 ### Installation
 
@@ -18,32 +22,28 @@ The following flags are available:
 
 *Sync Database*
 
-d) Downloads a copy of `mysql.sql` and imports it.
+d) Syncs your live database to local.
 
 `sync/sync.sh -d`
 
 *Overwrite Database*
 
-o) Imports `mysql.sql` if one is available in the `sync` directory.
+o) Imports `db.sql` if one is available in your site root.
 
 `sync/sync.sh -o`
 
 *Sync Plugins*
 
-p) Overwrites your local `/wp-content/plugins` with the latest from remote.
+p) Syncs your local `/wp-content/plugins` with the latest from remote.
 
 `sync/sync.sh -p`
 
 *Sync Media*
 
-u) Overwrites your local `/wp-content/media` with the latest from remote.
+u) Syncs your local `/wp-content/uploads` with the latest from remote.
 
 *Multiple Flags*
 
 You can also run a combination of flags:
 
 `sync/sync.sh -dpu`
-
-### Troubleshooting
-
-If you are connecting to a host for the first time, you may need to add the host to your list of known_hosts. If you also use an SFTP tool like Transmit, the easiest way might be to connect to the host first with Transmit as this add to known_hosts automatically for you.
